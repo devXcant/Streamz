@@ -10,30 +10,43 @@ const TrendingCard = ({
 }: TrendingCardProps) => {
   return (
     <Link href={`/movies/${movie_id}`} asChild>
-      <TouchableOpacity className="w-32 relative pl-5">
-        <Image
-          source={{ uri: poster_url }}
-          className="w-32 h-48 rounded-lg"
-          resizeMode="cover"
-        />
+      <TouchableOpacity className="w-32 relative">
+        <View className="relative">
+          <Image
+            source={{ uri: poster_url }}
+            className="w-32 h-48 rounded-xl border border-dark-100"
+            resizeMode="cover"
+          />
 
-        <View className="absolute bottom-9 -left-3.5 px-2 py-1 rounded-full">
+          {/* Gradient overlay */}
+          <View className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-xl" />
+
+          {/* Trending badge */}
+          <View className="absolute top-2 right-2 bg-accent rounded-full px-2 py-1">
+            <Text className="text-white text-xs font-bold">#{index + 1}</Text>
+          </View>
+        </View>
+
+        {/* Big number overlay - bottom left */}
+        <View className="absolute bottom-12 -left-2 px-2 py-1 rounded-full">
           <MaskedView
             maskElement={
-              <Text className="font-bold text-white text-6xl">
-                {" "}
+              <Text className="font-black text-white text-7xl leading-none">
                 {index + 1}
               </Text>
             }
           >
-            <Image
-              source={images.rankingGradient}
-              className="size-14"
-              resizeMode="cover"
-            />
+            <View className="w-16 h-16 bg-gradient-to-br from-accent to-accent-light" />
           </MaskedView>
-              </View>
-              <Text className="text-sm font-bold mt-2 text-light-200" numberOfLines={2}>{title}</Text>
+        </View>
+
+        <Text className="text-sm font-bold mt-3 text-white leading-tight" numberOfLines={2}>
+          {title}
+        </Text>
+
+        <View className="bg-accent/20 self-start px-2 py-1 rounded-md mt-1">
+          <Text className="text-accent text-xs font-medium">Trending</Text>
+        </View>
       </TouchableOpacity>
     </Link>
   );

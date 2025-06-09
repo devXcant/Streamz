@@ -1,14 +1,14 @@
+import Logo from "@/components/Logo";
 import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
-import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
 import { updateSearchCount } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
-const search = () => {
+const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const {
@@ -35,17 +35,15 @@ const search = () => {
       updateSearchCount(searchQuery, movies[0]);
     }
   }, [movies]);
+
   return (
     <View className="flex-1 bg-primary">
-      <Image
-        source={images.bg}
-        className="flex-1 absolute w-full z-0"
-        resizeMode="cover"
-      />
+      <View className="absolute inset-0 bg-gradient-to-b from-primary via-secondary to-primary" />
+
       <FlatList
         data={movies}
         renderItem={({ item }) => <MovieCard {...item} />}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => `search_${item.id.toString()}`}
         className="px-5"
         numColumns={3}
         columnWrapperStyle={{
@@ -56,45 +54,69 @@ const search = () => {
         contentContainerStyle={{ paddingBottom: 100 }}
         ListHeaderComponent={
           <>
-            <View className="w-full flex-row justify-center mt-20 items-center">
-              <Image source={icons.logo} className="w-12 h-10" />
+            <View className="w-full flex-row justify-center mt-20 items-center mb-8">
+              <Logo width={48} height={40} color="#dc2626" />
+              <Text className="text-2xl font-bold text-white ml-3">
+                Search<Text className="text-accent">Movies</Text>
+              </Text>
             </View>
+
             <View className="my-5">
               <SearchBar
-                placeholder="Search Movice..."
+                placeholder="Search Movies..."
                 value={searchQuery}
                 onChangeText={(text: string) => setSearchQuery(text)}
               />
             </View>
+
             {moviesLoading && (
-              <ActivityIndicator
-                size="large"
-                color="#0000ff"
-                className="my-3"
-              />
+              <View className="flex-row items-center justify-center my-8">
+                <ActivityIndicator size="large" color="#dc2626" />
+                <Text className="text-light-400 ml-3">Searching...</Text>
+              </View>
             )}
+
             {moviesError && (
-              <Text className="text-red-500 px-5 my-3">
-                Error: {moviesError.message}
-              </Text>
+              <View className="bg-accent-dark/20 border border-accent rounded-xl p-4 mx-5 my-3">
+                <Text className="text-accent text-center font-medium">
+                  Error: {moviesError.message}
+                </Text>
+              </View>
             )}
 
             {!moviesLoading &&
               !moviesError &&
               searchQuery.trim() &&
               movies?.length > 0 && (
-                <Text className="text-xl text-white font-bold">
-                  Search Results for{" "}
-                  <Text className="text-accent">{searchQuery}</Text>
-                </Text>
+                <View className="flex-row items-center mb-4">
+                  <View className="w-1 h-6 bg-accent rounded-full mr-3" />
+                  <Text className="text-xl text-white font-bold">
+                    Results for{" "}
+                    <Text className="text-accent">
+                      &quot;{searchQuery}&quot;
+                    </Text>
+                  </Text>
+                </View>
               )}
           </>
         }
         ListEmptyComponent={
           !moviesLoading && !moviesError ? (
-            <View className="mt-10 px-5">
-              <Text className="text-center text-gray-500">
-                {searchQuery.trim() ? "No movie found" : "Search for a movie"}
+            <View className="mt-20 px-5 items-center">
+              <View className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mb-4">
+                <Image
+                  source={icons.search}
+                  className="w-10 h-10"
+                  tintColor="#666666"
+                />
+              </View>
+              <Text className="text-center text-light-400 text-lg font-medium">
+                {searchQuery.trim() ? "No movies found" : "Search for movies"}
+              </Text>
+              <Text className="text-center text-light-400 text-sm mt-2">
+                {searchQuery.trim()
+                  ? "Try different keywords or check spelling"
+                  : "Enter a movie title to get started"}
               </Text>
             </View>
           ) : null
@@ -104,4 +126,4 @@ const search = () => {
   );
 };
 
-export default search;
+export default Search;

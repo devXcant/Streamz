@@ -7,19 +7,16 @@ import { Image, ImageBackground, Text, View } from "react-native";
 const TabIcon = ({ focused, icon, title }: any) => {
     if (focused) {
         return (
-            <ImageBackground
-                source={images.highlight}
-                className="flex flex-row w-full flex-1 min-w-[112px] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden"
-            >
-                <Image source={icon} tintColor="#151312" className="size-5" />
-                <Text className="text-secondary text-base font-semibold ml-2"> {title}</Text>
-            </ImageBackground>
+            <View className="flex flex-row w-full flex-1 min-w-[112px] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden bg-gradient-to-r from-accent to-accent-light shadow-lg">
+                <Image source={icon} tintColor="#ffffff" className="size-5" />
+                <Text className="text-white text-base font-semibold ml-2"> {title}</Text>
+            </View>
         )
     }
 
     return (
         <View className="size-full justify-center items-center mt-4 rounded-4">
-            <Image source={icon} tintColor='#A8B5DB' className="size-5" />
+            <Image source={icon} tintColor='#999999' className="size-5" />
         </View>
     )
 };
@@ -35,15 +32,20 @@ const _layout = () => {
               alignItems: 'center',
           },
           tabBarStyle: {
-              backgroundColor: '#0f0D23',
+              backgroundColor: '#1a1a1a',
               borderRadius: 50,
               marginHorizontal: 20,
               marginBottom: 36,
               height: 52,
               position: 'absolute',
               overflow: 'hidden',
-              borderWidth: 1,
-              borderColor: '0f0d23'
+              borderWidth: 2,
+              borderColor: '#333333',
+              shadowColor: '#dc2626',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 8,
           }
     }}>
       <Tabs.Screen
